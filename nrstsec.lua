@@ -750,7 +750,7 @@ do
     end)
     local WorldEventTPDropdownUI = Tabs.Teleports:AddDropdown("WorldEventTPDropdownUI", {
         Title = "Select World Event",
-        Values = {"Strange Whirlpool", "Great Hammerhead Shark", "Great White Shark", "Whale Shark", "The Depths - Serpent"},
+        Values = {"Strange Whirlpool", "Great Hammerhead Shark", "Great White Shark", "Whale Shark", "The Depths - Serpent", "Megalodon"},
         Multi = false,
         Default = nil,
     })
@@ -789,7 +789,7 @@ do
         elseif SelectedWorldEvent == "Megalodon" then
             local offset = Vector3.new(0, 50, 0)
             local WorldEvent = game.Workspace.zones.fishing:FindFirstChild("Megalodon")
-            if not WorldEvent then WorldEventTPDropdownUI:SetValue(nil) return ShowNotification("Not found The Megalodon") end
+            if not WorldEvent then WorldEventTPDropdownUI:SetValue(nil) return ShowNotification("Not found Megalodon") end
             HumanoidRootPart.CFrame = CFrame.new(game.Workspace.zones.fishing["Megalodon"].Position + offset)            -- Megalodon
             WorldEventTPDropdownUI:SetValue(nil)
         end
