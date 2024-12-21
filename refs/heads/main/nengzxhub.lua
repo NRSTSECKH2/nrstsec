@@ -64,7 +64,7 @@ if DeviceType == "Mobile" then
 end
 
 local Window = Fluent:CreateWindow({
-    Title = game:GetService("MarketplaceService"):GetProductInfo(16732694052).Name .." | Nome do seu HUB - Premium",
+    Title = game:GetService("MarketplaceService"):GetProductInfo(16732694052).Name .." | NengzXHub",
     SubTitle = " (discord.gg/J37PW97j6a)", -- discord link
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
@@ -105,9 +105,9 @@ local WaitForSomeone = RenderStepped.Wait
 
 
 -- // // // Variables // // // --
-local CastMode = "Legit"
+local CastMode = "Normal"
 local ShakeMode = "Navigation"
-local ReelMode = "Blatant"
+local ReelMode = "Insane"
 local CollectMode = "Teleports"
 local teleportSpots = {}
 local FreezeChar = false
@@ -119,7 +119,7 @@ local RunCount = false
 -- // // // Functions // // // --
 function ShowNotification(String)
     Fluent:Notify({
-        Title = "Nome do seu HUB",
+        Title = "NengzXHub",
         Content = String,
         Duration = 5
     })
@@ -163,7 +163,7 @@ local function autoCast()
         if tool then
             local hasBobber = tool:FindFirstChild("bobber")
             if not hasBobber then
-                if CastMode == "Legit" then
+                if CastMode == "Normal" then
                     VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, LocalPlayer, 0)
                     HumanoidRootPart.ChildAdded:Connect(function()
                         if HumanoidRootPart:FindFirstChild("power") ~= nil and HumanoidRootPart.power.powerbar.bar ~= nil then
@@ -176,7 +176,7 @@ local function autoCast()
                             end)
                         end
                     end)
-                elseif CastMode == "Blatant" then
+                elseif CastMode == "Insane" then
                     local rod = LocalCharacter and LocalCharacter:FindFirstChildOfClass("Tool")
                     if rod and rod:FindFirstChild("values") and string.find(rod.Name, "Rod") then
                         task.wait(0.5)
@@ -282,12 +282,12 @@ local function noperfect()
 end
 
 local function startAutoReel()
-    if ReelMode == "Legit" then
+    if ReelMode == "Normal" then
         if autoReelConnection or not autoReelEnabled then return end
         noperfect()
         task.wait(2)
         autoReelConnection = RunService.RenderStepped:Connect(autoReel)
-    elseif ReelMode == "Blatant" then
+    elseif ReelMode == "Insane" then
         local reel = PlayerGui:FindFirstChild("reel")
         if not reel then return end
         local bar = reel:FindFirstChild("bar")
@@ -554,10 +554,10 @@ Window:SelectTab(Home)
 
 do
     Tabs.Home:AddButton({
-        Title = "Copy Discord link",
-        Description = "Join our main discord!",
+        Title = "Copy Telegram link",
+        Description = "Contact Dev!",
         Callback = function()
-            setclipboard("https://discord.gg/J37PW97j6a") -- discord link
+            setclipboard("https://t.me/ismenengzx") -- telegram link
         end
     })
 
@@ -642,7 +642,7 @@ do
                 if tool then
                     local hasBobber = tool:FindFirstChild("bobber")
                     if not hasBobber then
-                        if CastMode == "Legit" then
+                        if CastMode == "Normal" then
                             VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, LocalPlayer, 0)
                             HumanoidRootPart.ChildAdded:Connect(function()
                                 if HumanoidRootPart:FindFirstChild("power") ~= nil and HumanoidRootPart.power.powerbar.bar ~= nil then
@@ -655,7 +655,7 @@ do
                                     end)
                                 end
                             end)
-                        elseif CastMode == "Blatant" then
+                        elseif CastMode == "Insane" then
                             local rod = LocalCharacter and LocalCharacter:FindFirstChildOfClass("Tool")
                             if rod and rod:FindFirstChild("values") and string.find(rod.Name, "Rod") then
                                 task.wait(0.5)
@@ -710,7 +710,7 @@ do
     local section = Tabs.Main:AddSection("Mode Fishing")
     local autoCastMode = Tabs.Main:AddDropdown("autoCastMode", {
         Title = "Auto Cast Mode",
-        Values = {"Legit", "Blatant"},
+        Values = {"Normal", "Insane"},
         Multi = false,
         Default = CastMode,
     })
@@ -728,7 +728,7 @@ do
     end)
     local autoReelMode = Tabs.Main:AddDropdown("autoReelMode", {
         Title = "Auto Reel Mode",
-        Values = {"Legit", "Blatant"},
+        Values = {"Normal", "Insane"},
         Multi = false,
         Default = ReelMode,
     })
