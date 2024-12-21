@@ -68,7 +68,7 @@ local Window = Fluent:CreateWindow({
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, 
-    Theme = "Pink",
+    Theme = "Dark",
     MinimizeKey = Enum.KeyCode.LeftControl 
 })
 
@@ -785,12 +785,6 @@ do
             local WorldEvent = game.Workspace.zones.fishing:FindFirstChild("The Depths - Serpent")
             if not WorldEvent then WorldEventTPDropdownUI:SetValue(nil) return ShowNotification("Not found The Depths - Serpent") end
             HumanoidRootPart.CFrame = CFrame.new(game.Workspace.zones.fishing["The Depths - Serpent"].Position + offset)            -- The Depths - Serpent
-            WorldEventTPDropdownUI:SetValue(nil)
-        elseif SelectedWorldEvent == "Megalodon" then
-            local offset = Vector3.new(0, 50, 0)
-            local WorldEvent = game.Workspace.zones.fishing:FindFirstChild("Megalodon")
-            if not WorldEvent then WorldEventTPDropdownUI:SetValue(nil) return ShowNotification("Not found Megalodon") end
-            HumanoidRootPart.CFrame = CFrame.new(game.Workspace.zones.fishing["Megalodon"].Position + offset)            -- Megalodon
             WorldEventTPDropdownUI:SetValue(nil)
         end
     end)
