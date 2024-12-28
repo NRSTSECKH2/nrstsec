@@ -787,25 +787,6 @@ do
             WorldEventTPDropdownUI:SetValue(nil)
         end
     end)
-    local WorldEventTPDropdownUI = Tabs.Teleports:AddDropdown("WorldEventTPDropdownUI", {
-        Title = "Teleport To Player",
-        Values = getPlayerNames(),  -- Populate dropdown with player names
-        Multi = false,
-        Default = nil,
-    })
-    
-    -- Function to teleport the local player to the selected player
-    local function teleportToPlayer(playerName)
-        local targetPlayer = Players:FindFirstChild(playerName)
-        if targetPlayer and targetPlayer.Character then
-            LocalPlayer.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
-        end
-    end
-    
-    -- Connect the dropdown change event to teleport the player
-    WorldEventTPDropdownUI.OnChanged = function(selectedValue)
-        teleportToPlayer(selectedValue)
-    end
     Tabs.Teleports:AddButton({
         Title = "Teleport to Traveler Merchant",
         Description = "Teleports to the Traveler Merchant.",
