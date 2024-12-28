@@ -1,4 +1,4 @@
-if getgenv().cuppink then warn("NengzXHUB Hub : Already executed!") return end
+if getgenv().cuppink then warn("NengzXHUB : Already executed!") return end
 getgenv().cuppink = true
 
 if not game:IsLoaded() then
@@ -64,8 +64,8 @@ if DeviceType == "Mobile" then
 end
 
 local Window = Fluent:CreateWindow({
-    Title = game:GetService("MarketplaceService"):GetProductInfo(16732694052).Name .." | CupPink - Premium",
-    SubTitle = "discord.gg/25ms)",
+    Title = game:GetService("MarketplaceService"):GetProductInfo(16732694052).Name .." | NengzXHUB-Freemium",
+    SubTitle = "t.me/ismenengzx)",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
@@ -119,7 +119,7 @@ local RunCount = false
 -- // // // Functions // // // --
 function ShowNotification(String)
     Fluent:Notify({
-        Title = "NengzX Hub",
+        Title = "NengzXHUB",
         Content = String,
         Duration = 5
     })
@@ -510,37 +510,10 @@ PlayerGui.DescendantAdded:Connect(function(descendant)
     end
 end)
 
--- // // // Exclusives // // // --
-local shadowCountLabel = Instance.new("TextLabel", screenGui)
-shadowCountLabel.Size = UDim2.new(0, 200, 0, 50)
-shadowCountLabel.Position = UDim2.new(0, 30, 0, 260)
-shadowCountLabel.BackgroundTransparency = 0.5
-shadowCountLabel.BackgroundColor3 = Color3.fromRGB(38, 38, 38) 
-shadowCountLabel.TextColor3 = Color3.new(220, 125, 255)
-shadowCountLabel.Font = Enum.Font.SourceSans
-shadowCountLabel.TextSize = 24
-shadowCountLabel.Text = "Shadow Count: 0"
-
-local corner = Instance.new("UICorner", shadowCountLabel)
-corner.CornerRadius = UDim.new(0, 10)
-
-local function updateShadowCount()
-    local count = #workspace.Shadows:GetChildren()
-    shadowCountLabel.Text = "Shadow Count: " .. count
-end
-
-spawn(function()
-    while true do
-        updateShadowCount()
-        task.wait(0.5)
-    end
-end)
-
 -- // // // Tabs Gui // // // --
 
-local Tabs = { -- https://lucide.dev/icons/
+local Tabs = { -- u
     Home = Window:AddTab({ Title = "Home", Icon = "home" }),
-    Exclusives = Window:AddTab({ Title = "Exclusives", Icon = "heart" }),
     Main = Window:AddTab({ Title = "Main", Icon = "list" }),
     Items = Window:AddTab({ Title = "Items", Icon = "box" }),
     Teleports = Window:AddTab({ Title = "Teleports", Icon = "map-pin" }),
@@ -552,76 +525,10 @@ local Options = Fluent.Options
 
 do
     Tabs.Home:AddButton({
-        Title = "Copy Discord link",
-        Description = "Join our main discord!",
+        Title = "Copy Telegram link",
+        Description = "Chat With Dev!",
         Callback = function()
-            setclipboard("https://discord.gg/25ms")
-        end
-    })
-
-    -- // Exclusives Tab // --
-    local sectionExclus = Tabs.Exclusives:AddSection("Exclusives Features")
-    local CountShadows = Tabs.Exclusives:AddToggle("CountShadows", {Title = "Show Count Shadows", Default = false })
-    CountShadows:OnChanged(function()
-        local RequireRod = PlayerGui.hud.safezone.equipment.rods.scroll.safezone:FindFirstChild("Rod Of The Depths")
-        if not RequireRod then return ShowNotification("Requirement Rod Of The Depths") end
-        if Options.CountShadows.Value == true then
-            shadowCountLabel.Visible = true
-        else
-            shadowCountLabel.Visible = false
-        end
-    end)
-    local RodDupe = Tabs.Exclusives:AddToggle("RodDupe", {Title = "Rod Of The Depths Spam", Default = false })
-    RodDupe:OnChanged(function()
-        local RequireRod = PlayerGui.hud.safezone.equipment.rods.scroll.safezone:FindFirstChild("Rod Of The Depths")
-        if not RequireRod then return ShowNotification("Requirement Rod Of The Depths") end
-        while Options.RodDupe.Value do
-            local args1 = {[1] = "Flimsy Rod"}
-            game:GetService("ReplicatedStorage").events.equiprod:FireServer(unpack(args1))
-
-            local args2 = {[1] = "Rod Of The Depths"}
-            game:GetService("ReplicatedStorage").events.equiprod:FireServer(unpack(args2))
-            task.wait(RodDupeDelay)
-        end
-    end)
-    local RodDupe_Delay = Tabs.Exclusives:AddSlider("RodDupe_Delay", {
-        Title = "Rod Of The Depths Spam Delay",
-        Description = "",
-        Default = 0.2,
-        Min = 0,
-        Max = 1,
-        Rounding = 1,
-        Callback = function(Value)
-            RodDupeDelay = Value
-        end
-    })
-    Tabs.Exclusives:AddButton({
-        Title = "Dupe Shadow",
-        Description = "",
-        Callback = function()
-            local RequireRod = PlayerGui.hud.safezone.equipment.rods.scroll.safezone:FindFirstChild("Rod Of The Depths")
-            if not RequireRod then return ShowNotification("Requirement Rod Of The Depths") end
-            for i,v in pairs(LocalPlayer.Backpack:GetChildren()) do 
-                if v:FindFirstChild("offer") then
-                    v.Parent = LocalPlayer.Character
-                end
-            end
-            task.wait(2)
-            for i,v in pairs(LocalPlayer.Character:GetChildren()) do 
-                if v:FindFirstChild("offer") then
-                    v.Parent = LocalPlayer.Backpack
-                end
-            end
-        end
-    })
-
-    Tabs.Exclusives:AddButton({
-        Title = "Destroy Shadows",
-        Description = "",
-        Callback = function()
-            for _,shadow in pairs(workspace.Shadows:GetChildren()) do
-    		    shadow:Destroy()
-		    end
+            setclipboard("https://t.me/ismenengzx")
         end
     })
 
@@ -836,7 +743,7 @@ do
     end)
     local WorldEventTPDropdownUI = Tabs.Teleports:AddDropdown("WorldEventTPDropdownUI", {
         Title = "Select World Event",
-        Values = {"Strange Whirlpool", "Great Hammerhead Shark", "Great White Shark", "Whale Shark", "The Depths - Serpent"},
+        Values = {"Strange Whirlpool", "Great Hammerhead Shark", "Great White Shark", "Whale Shark", "The Depths - Serpent", "Megalodon"},
         Multi = false,
         Default = nil,
     })
@@ -871,6 +778,12 @@ do
             local WorldEvent = game.Workspace.zones.fishing:FindFirstChild("The Depths - Serpent")
             if not WorldEvent then WorldEventTPDropdownUI:SetValue(nil) return ShowNotification("Not found The Depths - Serpent") end
             HumanoidRootPart.CFrame = CFrame.new(game.Workspace.zones.fishing["The Depths - Serpent"].Position + offset)            -- The Depths - Serpent
+            WorldEventTPDropdownUI:SetValue(nil)
+        elseif SelectedWorldEvent == "Megalodon" then
+            local offset = Vector3.new(0, 135, 0)
+            local WorldEvent = game.Workspace.zones.fishing:FindFirstChild("Megalodon")
+            if not WorldEvent then WorldEventTPDropdownUI:SetValue(nil) return ShowNotification("Not found Megalodon") end
+            HumanoidRootPart.CFrame = CFrame.new(game.Workspace.zones.fishing["Megalodon"].Position + offset)                     -- Whale Shark
             WorldEventTPDropdownUI:SetValue(nil)
         end
     end)
