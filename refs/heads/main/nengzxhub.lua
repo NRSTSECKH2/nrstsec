@@ -1,5 +1,5 @@
-if getgenv().hub then warn("NengzXHub : Already executed!") return end
-getgenv().hub = true
+if getgenv().cuppink then warn("NengzXHUB Hub : Already executed!") return end
+getgenv().cuppink = true
 
 if not game:IsLoaded() then
     game.Loaded:Wait()
@@ -43,7 +43,7 @@ if DeviceType == "Mobile" then
     ImageLabel.BorderSizePixel = 0
     ImageLabel.Position = UDim2.new(0.5, 0, 0.5, 0)
     ImageLabel.Size = UDim2.new(0, 45, 0, 45)
-    ImageLabel.Image = "rbxassetid://" -- add image here
+    ImageLabel.Image = "rbxassetid://"
 
     TextButton.Parent = MainFrame
     TextButton.BackgroundColor3 = Color3.new(1, 1, 1)
@@ -64,11 +64,12 @@ if DeviceType == "Mobile" then
 end
 
 local Window = Fluent:CreateWindow({
-    Title = game:GetService("MarketplaceService"):GetProductInfo(16732694052).Name .." | NengzXHub",
+    Title = game:GetService("MarketplaceService"):GetProductInfo(16732694052).Name .." | CupPink - Premium",
+    SubTitle = "discord.gg/25ms)",
     TabWidth = 160,
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
-    Theme = "Dark",
+    Theme = "Rose",
     MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
 })
 
@@ -104,9 +105,9 @@ local WaitForSomeone = RenderStepped.Wait
 
 
 -- // // // Variables // // // --
-local CastMode = "Normal"
+local CastMode = "Legit"
 local ShakeMode = "Navigation"
-local ReelMode = "Insane"
+local ReelMode = "Blatant"
 local CollectMode = "Teleports"
 local teleportSpots = {}
 local FreezeChar = false
@@ -118,7 +119,7 @@ local RunCount = false
 -- // // // Functions // // // --
 function ShowNotification(String)
     Fluent:Notify({
-        Title = "NengzXHub",
+        Title = "NengzX Hub",
         Content = String,
         Duration = 5
     })
@@ -162,7 +163,7 @@ local function autoCast()
         if tool then
             local hasBobber = tool:FindFirstChild("bobber")
             if not hasBobber then
-                if CastMode == "Normal" then
+                if CastMode == "Legit" then
                     VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, LocalPlayer, 0)
                     HumanoidRootPart.ChildAdded:Connect(function()
                         if HumanoidRootPart:FindFirstChild("power") ~= nil and HumanoidRootPart.power.powerbar.bar ~= nil then
@@ -175,7 +176,7 @@ local function autoCast()
                             end)
                         end
                     end)
-                elseif CastMode == "Insane" then
+                elseif CastMode == "Blatant" then
                     local rod = LocalCharacter and LocalCharacter:FindFirstChildOfClass("Tool")
                     if rod and rod:FindFirstChild("values") and string.find(rod.Name, "Rod") then
                         task.wait(0.5)
@@ -281,12 +282,12 @@ local function noperfect()
 end
 
 local function startAutoReel()
-    if ReelMode == "Normal" then
+    if ReelMode == "Legit" then
         if autoReelConnection or not autoReelEnabled then return end
         noperfect()
         task.wait(2)
         autoReelConnection = RunService.RenderStepped:Connect(autoReel)
-    elseif ReelMode == "Insane" then
+    elseif ReelMode == "Blatant" then
         local reel = PlayerGui:FindFirstChild("reel")
         if not reel then return end
         local bar = reel:FindFirstChild("bar")
@@ -509,6 +510,25 @@ PlayerGui.DescendantAdded:Connect(function(descendant)
     end
 end)
 
+-- // // // Exclusives // // // --
+local shadowCountLabel = Instance.new("TextLabel", screenGui)
+shadowCountLabel.Size = UDim2.new(0, 200, 0, 50)
+shadowCountLabel.Position = UDim2.new(0, 30, 0, 260)
+shadowCountLabel.BackgroundTransparency = 0.5
+shadowCountLabel.BackgroundColor3 = Color3.fromRGB(38, 38, 38) 
+shadowCountLabel.TextColor3 = Color3.new(220, 125, 255)
+shadowCountLabel.Font = Enum.Font.SourceSans
+shadowCountLabel.TextSize = 24
+shadowCountLabel.Text = "Shadow Count: 0"
+
+local corner = Instance.new("UICorner", shadowCountLabel)
+corner.CornerRadius = UDim.new(0, 10)
+
+local function updateShadowCount()
+    local count = #workspace.Shadows:GetChildren()
+    shadowCountLabel.Text = "Shadow Count: " .. count
+end
+
 spawn(function()
     while true do
         updateShadowCount()
@@ -520,25 +540,91 @@ end)
 
 local Tabs = { -- https://lucide.dev/icons/
     Home = Window:AddTab({ Title = "Home", Icon = "home" }),
+    Exclusives = Window:AddTab({ Title = "Exclusives", Icon = "heart" }),
     Main = Window:AddTab({ Title = "Main", Icon = "list" }),
     Items = Window:AddTab({ Title = "Items", Icon = "box" }),
     Teleports = Window:AddTab({ Title = "Teleports", Icon = "map-pin" }),
-    Misc = Window:AddTab({ Title = "Misc", Icon = "file-text" })
+    Misc = Window:AddTab({ Title = "Misc", Icon = "file-text" }),
+    Trade = Window:AddTab({ Title = "Trade", Icon = "gift" })
 }
 
 local Options = Fluent.Options
 
-Window:SelectTab(Home)
-
 do
     Tabs.Home:AddButton({
-        Title = "Copy Telegram link",
-        Description = "Contact Dev!",
+        Title = "Copy Discord link",
+        Description = "Join our main discord!",
         Callback = function()
-            setclipboard("https://t.me/ismenengzx") -- telegram link
+            setclipboard("https://discord.gg/25ms")
         end
     })
-    
+
+    -- // Exclusives Tab // --
+    local sectionExclus = Tabs.Exclusives:AddSection("Exclusives Features")
+    local CountShadows = Tabs.Exclusives:AddToggle("CountShadows", {Title = "Show Count Shadows", Default = false })
+    CountShadows:OnChanged(function()
+        local RequireRod = PlayerGui.hud.safezone.equipment.rods.scroll.safezone:FindFirstChild("Rod Of The Depths")
+        if not RequireRod then return ShowNotification("Requirement Rod Of The Depths") end
+        if Options.CountShadows.Value == true then
+            shadowCountLabel.Visible = true
+        else
+            shadowCountLabel.Visible = false
+        end
+    end)
+    local RodDupe = Tabs.Exclusives:AddToggle("RodDupe", {Title = "Rod Of The Depths Spam", Default = false })
+    RodDupe:OnChanged(function()
+        local RequireRod = PlayerGui.hud.safezone.equipment.rods.scroll.safezone:FindFirstChild("Rod Of The Depths")
+        if not RequireRod then return ShowNotification("Requirement Rod Of The Depths") end
+        while Options.RodDupe.Value do
+            local args1 = {[1] = "Flimsy Rod"}
+            game:GetService("ReplicatedStorage").events.equiprod:FireServer(unpack(args1))
+
+            local args2 = {[1] = "Rod Of The Depths"}
+            game:GetService("ReplicatedStorage").events.equiprod:FireServer(unpack(args2))
+            task.wait(RodDupeDelay)
+        end
+    end)
+    local RodDupe_Delay = Tabs.Exclusives:AddSlider("RodDupe_Delay", {
+        Title = "Rod Of The Depths Spam Delay",
+        Description = "",
+        Default = 0.2,
+        Min = 0,
+        Max = 1,
+        Rounding = 1,
+        Callback = function(Value)
+            RodDupeDelay = Value
+        end
+    })
+    Tabs.Exclusives:AddButton({
+        Title = "Dupe Shadow",
+        Description = "",
+        Callback = function()
+            local RequireRod = PlayerGui.hud.safezone.equipment.rods.scroll.safezone:FindFirstChild("Rod Of The Depths")
+            if not RequireRod then return ShowNotification("Requirement Rod Of The Depths") end
+            for i,v in pairs(LocalPlayer.Backpack:GetChildren()) do 
+                if v:FindFirstChild("offer") then
+                    v.Parent = LocalPlayer.Character
+                end
+            end
+            task.wait(2)
+            for i,v in pairs(LocalPlayer.Character:GetChildren()) do 
+                if v:FindFirstChild("offer") then
+                    v.Parent = LocalPlayer.Backpack
+                end
+            end
+        end
+    })
+
+    Tabs.Exclusives:AddButton({
+        Title = "Destroy Shadows",
+        Description = "",
+        Callback = function()
+            for _,shadow in pairs(workspace.Shadows:GetChildren()) do
+    		    shadow:Destroy()
+		    end
+        end
+    })
+
     -- // Main Tab // --
     local section = Tabs.Main:AddSection("Auto Fishing")
     local autoCast = Tabs.Main:AddToggle("autoCast", {Title = "Auto Cast", Default = false })
@@ -554,7 +640,7 @@ do
                 if tool then
                     local hasBobber = tool:FindFirstChild("bobber")
                     if not hasBobber then
-                        if CastMode == "Normal" then
+                        if CastMode == "Legit" then
                             VirtualInputManager:SendMouseButtonEvent(0, 0, 0, true, LocalPlayer, 0)
                             HumanoidRootPart.ChildAdded:Connect(function()
                                 if HumanoidRootPart:FindFirstChild("power") ~= nil and HumanoidRootPart.power.powerbar.bar ~= nil then
@@ -567,7 +653,7 @@ do
                                     end)
                                 end
                             end)
-                        elseif CastMode == "Insane" then
+                        elseif CastMode == "Blatant" then
                             local rod = LocalCharacter and LocalCharacter:FindFirstChildOfClass("Tool")
                             if rod and rod:FindFirstChild("values") and string.find(rod.Name, "Rod") then
                                 task.wait(0.5)
@@ -622,7 +708,7 @@ do
     local section = Tabs.Main:AddSection("Mode Fishing")
     local autoCastMode = Tabs.Main:AddDropdown("autoCastMode", {
         Title = "Auto Cast Mode",
-        Values = {"Normal", "Insane"},
+        Values = {"Legit", "Blatant"},
         Multi = false,
         Default = CastMode,
     })
@@ -640,7 +726,7 @@ do
     end)
     local autoReelMode = Tabs.Main:AddDropdown("autoReelMode", {
         Title = "Auto Reel Mode",
-        Values = {"Normal", "Insane"},
+        Values = {"Legit", "Blatant"},
         Multi = false,
         Default = ReelMode,
     })
@@ -981,11 +1067,13 @@ do
             loadstring(game:HttpGetAsync("https://github.com/richie0866/remote-spy/releases/latest/download/RemoteSpy.lua"))()
         end
     })
+
+    local section = Tabs.Trade:AddSection("Coming Soon...")
 end
 
 Window:SelectTab(1)
 Fluent:Notify({
-    Title = "Nome do seu HUB",
+    Title = "CupPink",
     Content = "Executed!",
     Duration = 8
 })
