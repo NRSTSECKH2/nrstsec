@@ -26,7 +26,7 @@ if DeviceType == "Mobile" then
     MainFrame.Parent = ClickButton
     MainFrame.AnchorPoint = Vector2.new(1, 0)
     MainFrame.BackgroundTransparency = 0.8
-    MainFrame.BackgroundColor3 = Color3.fromRGB(38, 38, 38) 
+    MainFrame.BackgroundColor3 = Color3.fromRGB(38, 38, 38)
     MainFrame.BorderSizePixel = 0
     MainFrame.Position = UDim2.new(1, -60, 0, 10)
     MainFrame.Size = UDim2.new(0, 45, 0, 45)
@@ -70,7 +70,7 @@ local Window = Fluent:CreateWindow({
     Size = UDim2.fromOffset(580, 460),
     Acrylic = false, -- The blur may be detectable, setting this to false disables blur entirely
     Theme = "Rose",
-    MinimizeKey = Enum.KeyCode.LeftControl -- Used when theres no MinimizeKeybind
+    MinimizeKey = Enum.KeyCode.LeftControl -- Used when there's no MinimizeKeybind
 })
 
 -- // // // Services // // // --
@@ -364,22 +364,22 @@ end
 
 -- // // // Get Position // // // --
 function GetPosition()
-	if not game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-		return {
-			Vector3.new(0,0,0),
-			Vector3.new(0,0,0),
-			Vector3.new(0,0,0)
-		}
-	end
-	return {
-		game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position.X,
-		game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position.Y,
-		game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position.Z
-	}
+    if not game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        return {
+            Vector3.new(0,0,0),
+            Vector3.new(0,0,0),
+            Vector3.new(0,0,0)
+        }
+    end
+    return {
+        game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position.X,
+        game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position.Y,
+        game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart").Position.Z
+    }
 end
 
 function ExportValue(arg1, arg2)
-	return tonumber(string.format("%."..(arg2 or 1)..'f', arg1))
+    return tonumber(string.format("%."..(arg2 or 1)..'f', arg1))
 end
 
 -- // // // Sell Item // // // --
@@ -713,34 +713,12 @@ do
                 HumanoidRootPart.CFrame = TpSpotsFolder:FindFirstChild(Value).CFrame + Vector3.new(0, 5, 0)
                 IslandTPDropdownUI:SetValue(nil)
             end,function (err)
+                -- Handle any errors here
             end)
         end
     end)
-    local TotemTPDropdownUI = Tabs.Teleports:AddDropdown("TotemTPDropdownUI", {
-        Title = "Select Totem",
-        Values = {"Aurora", "Sundial", "Windset", "Smokescreen", "Tempest"},
-        Multi = false,
-        Default = nil,
-    })
-    TotemTPDropdownUI:OnChanged(function(Value)
-        SelectedTotem = Value
-        if SelectedTotem == "Aurora" then
-            HumanoidRootPart.CFrame = CFrame.new(-1811, -137, -3282)
-            TotemTPDropdownUI:SetValue(nil)
-        elseif SelectedTotem == "Sundial" then
-            HumanoidRootPart.CFrame = CFrame.new(-1148, 135, -1075)
-            TotemTPDropdownUI:SetValue(nil)
-        elseif SelectedTotem == "Windset" then
-            HumanoidRootPart.CFrame = CFrame.new(2849, 178, 2702)
-            TotemTPDropdownUI:SetValue(nil)
-        elseif SelectedTotem == "Smokescreen" then
-            HumanoidRootPart.CFrame = CFrame.new(2789, 140, -625)
-            TotemTPDropdownUI:SetValue(nil)
-        elseif SelectedTotem == "Tempest" then
-            HumanoidRootPart.CFrame = CFrame.new(35, 133, 1943)
-            TotemTPDropdownUI:SetValue(nil)
-        end
-    end)
+
+    -- Dropdown for World Events Teleport
     local WorldEventTPDropdownUI = Tabs.Teleports:AddDropdown("WorldEventTPDropdownUI", {
         Title = "Select World Event",
         Values = {"Strange Whirlpool", "Great Hammerhead Shark", "Great White Shark", "Whale Shark", "The Depths - Serpent", "Megalodon"},
@@ -749,45 +727,59 @@ do
     })
 
     WorldEventTPDropdownUI:OnChanged(function(Value)
-        SelectedWorldEvent = Value
-        if SelectedWorldEvent == "Strange Whirlpool" then
-            local offset = Vector3.new(25, 135, 25)
-            local WorldEvent = game.Workspace.zones.fishing:FindFirstChild("Isonade")
-            if not WorldEvent then WorldEventTPDropdownUI:SetValue(nil) return ShowNotification("Not found Strange Whirlpool") end
-            HumanoidRootPart.CFrame = CFrame.new(game.Workspace.zones.fishing.Isonade.Position + offset)                           -- Strange Whirlpool
-            WorldEventTPDropdownUI:SetValue(nil)
-        elseif SelectedWorldEvent == "Great Hammerhead Shark" then
-            local offset = Vector3.new(0, 135, 0)
-            local WorldEvent = game.Workspace.zones.fishing:FindFirstChild("Great Hammerhead Shark")
-            if not WorldEvent then WorldEventTPDropdownUI:SetValue(nil) return ShowNotification("Not found Great Hammerhead Shark") end
-            HumanoidRootPart.CFrame = CFrame.new(game.Workspace.zones.fishing["Great Hammerhead Shark"].Position + offset)         -- Great Hammerhead Shark
-            WorldEventTPDropdownUI:SetValue(nil)
-        elseif SelectedWorldEvent == "Great White Shark" then
-            local offset = Vector3.new(0, 135, 0)
-            local WorldEvent = game.Workspace.zones.fishing:FindFirstChild("Great White Shark")
-            if not WorldEvent then WorldEventTPDropdownUI:SetValue(nil) return ShowNotification("Not found Great White Shark") end
-            HumanoidRootPart.CFrame = CFrame.new(game.Workspace.zones.fishing["Great White Shark"].Position + offset)               -- Great White Shark
-            WorldEventTPDropdownUI:SetValue(nil)
-        elseif SelectedWorldEvent == "Whale Shark" then
-            local offset = Vector3.new(0, 135, 0)
-            local WorldEvent = game.Workspace.zones.fishing:FindFirstChild("Whale Shark")
-            if not WorldEvent then WorldEventTPDropdownUI:SetValue(nil) return ShowNotification("Not found Whale Shark") end
-            HumanoidRootPart.CFrame = CFrame.new(game.Workspace.zones.fishing["Whale Shark"].Position + offset)                     -- Whale Shark
-            WorldEventTPDropdownUI:SetValue(nil)
-        elseif SelectedWorldEvent == "The Depths - Serpent" then
-            local offset = Vector3.new(0, 50, 0)
-            local WorldEvent = game.Workspace.zones.fishing:FindFirstChild("The Depths - Serpent")
-            if not WorldEvent then WorldEventTPDropdownUI:SetValue(nil) return ShowNotification("Not found The Depths - Serpent") end
-            HumanoidRootPart.CFrame = CFrame.new(game.Workspace.zones.fishing["The Depths - Serpent"].Position + offset)            -- The Depths - Serpent
-            WorldEventTPDropdownUI:SetValue(nil)
-        elseif SelectedWorldEvent == "Megalodon" then
-            local offset = Vector3.new(0, 135, 0)
-            local WorldEvent = game.Workspace.zones.fishing:FindFirstChild("Megalodon")
-            if not WorldEvent then WorldEventTPDropdownUI:SetValue(nil) return ShowNotification("Not found Megalodon") end
-            HumanoidRootPart.CFrame = CFrame.new(game.Workspace.zones.fishing["Megalodon"].Position + offset)                     -- Whale Shark
-            WorldEventTPDropdownUI:SetValue(nil)
+        -- Define your teleport offset if needed
+        local offset = Vector3.new(0, 0, 0)
+        local WorldEventLocations = {
+            ["Strange Whirlpool"] = CFrame.new(game.Workspace.zones.fishing.Isonade.Position + offset),
+            ["Great Hammerhead Shark"] = CFrame.new(game.Workspace.zones.fishing["Great Hammerhead Shark"].Position + offset),
+            ["Great White Shark"] = CFrame.new(game.Workspace.zones.fishing["Great White Shark"].Position + offset),
+            ["Whale Shark"] = CFrame.new(game.Workspace.zones.fishing["Whale Shark"].Position + offset),
+            ["The Depths - Serpent"] = CFrame.new(game.Workspace.zones.fishing["The Depths - Serpent"].Position + Vector3.new(0, 50, 0)),
+            ["Megalodon"] = CFrame.new(game.Workspace.zones.fishing["Megalodon"].Position + offset),
+        }
+
+        if WorldEventLocations[Value] and HumanoidRootPart then
+            HumanoidRootPart.CFrame = WorldEventLocations[Value]
+            WorldEventTPDropdownUI:SetValue(nil) -- Reset the dropdown
+        else
+            ShowNotification("Not found: " .. Value) -- Notify if the location is not found
         end
     end)
+
+    -- New Dropdown for Teleporting to Players
+    local TeleportToPlayerDropdownUI = Tabs.Teleports:AddDropdown("TeleportToPlayerDropdownUI", {
+        Title = "Teleport To Player",
+        Values = {},  -- To be filled with actual player names
+        Multi = false,
+        Default = nil,
+    })
+
+    -- Populate Values with Player Names
+    local function updatePlayerList()
+        local playerNames = {}
+        for _, player in pairs(Players:GetPlayers()) do
+            table.insert(playerNames, player.Name)
+        end
+        TeleportToPlayerDropdownUI:SetValues(playerNames)
+    end
+
+    TeleportToPlayerDropdownUI:OnChanged(function(Value)
+        for _, player in pairs(Players:GetPlayers()) do
+            if player.Name == Value and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
+                HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0) -- Adjust position if needed
+                TeleportToPlayerDropdownUI:SetValue(nil) -- Reset the dropdown after teleporting
+                break
+            end
+        end
+    end)
+
+    -- Update Player List on Player Added and Removed
+    Players.PlayerAdded:Connect(updatePlayerList)
+    Players.PlayerRemoving:Connect(updatePlayerList)
+
+    updatePlayerList() -- Initial call to populate the dropdown with current player names
+
+    -- Button to teleport to the Traveler Merchant
     Tabs.Teleports:AddButton({
         Title = "Teleport to Traveler Merchant",
         Description = "Teleports to the Traveler Merchant.",
@@ -811,13 +803,13 @@ do
         end
     })
 
-    -- // Character Tab // --
+    -- // // // Character Tab // // // --
     local section = Tabs.Misc:AddSection("Character")
     local WalkOnWater = Tabs.Misc:AddToggle("WalkOnWater", {Title = "Walk On Water", Default = false })
     WalkOnWater:OnChanged(function()
         for i,v in pairs(workspace.zones.fishing:GetChildren()) do
-			if v.Name == WalkZone then
-				v.CanCollide = Options.WalkOnWater.Value
+            if v.Name == WalkZone then
+                v.CanCollide = Options.WalkOnWater.Value
                 if v.Name == "Ocean" then
                     for i,v in pairs(workspace.zones.fishing:GetChildren()) do
                         if v.Name == "Deep Ocean" then
@@ -825,8 +817,8 @@ do
                         end
                     end
                 end
-			end
-		end
+            end
+        end
     end)
     local WalkOnWaterZone = Tabs.Misc:AddDropdown("WalkOnWaterZone", {
         Title = "Walk On Water Zone",
@@ -863,37 +855,37 @@ do
         Noclip = Options.ToggleNoclip.Value
     end)
 
-    -- // Misc Tab // --
+    -- // // // Misc Tab // --
     local section = Tabs.Misc:AddSection("Misc")
     local BypassRadar = Tabs.Misc:AddToggle("BypassRadar", {Title = "Bypass Fish Radar", Default = false })
     BypassRadar:OnChanged(function()
         for _, v in pairs(game:GetService("CollectionService"):GetTagged("radarTag")) do
-			if v:IsA("BillboardGui") or v:IsA("SurfaceGui") then
-				v.Enabled = Options.BypassRadar.Value
-			end
-		end
+            if v:IsA("BillboardGui") or v:IsA("SurfaceGui") then
+                v.Enabled = Options.BypassRadar.Value
+            end
+        end
     end)
     local BypassGPS = Tabs.Misc:AddToggle("BypassGPS", {Title = "Bypass GPS", Default = false })
     BypassGPS:OnChanged(function()
         if Options.BypassGPS.Value == true then
             local XyzClone = game:GetService("ReplicatedStorage").resources.items.items.GPS.GPS.gpsMain.xyz:Clone()
-			XyzClone.Parent = game.Players.LocalPlayer.PlayerGui:WaitForChild("hud"):WaitForChild("safezone"):WaitForChild("backpack")
-			local Pos = GetPosition()
-			local StringInput = string.format("%s, %s, %s", ExportValue(Pos[1]), ExportValue(Pos[2]), ExportValue(Pos[3]))
-			XyzClone.Text = "<font color='#ff4949'>X</font><font color = '#a3ff81'>Y</font><font color = '#626aff'>Z</font>: "..StringInput
-			BypassGpsLoop = game:GetService("RunService").Heartbeat:Connect(function()
-				local Pos = GetPosition()
-				StringInput = string.format("%s, %s, %s", ExportValue(Pos[1]), ExportValue(Pos[2]), ExportValue(Pos[3]))
-				XyzClone.Text = "<font color='#ff4949'>X</font><font color = '#a3ff81'>Y</font><font color = '#626aff'>Z</font> : "..StringInput
-			end)
-		else
-			if PlayerGui.hud.safezone.backpack:FindFirstChild("xyz") then
-				PlayerGui.hud.safezone.backpack:FindFirstChild("xyz"):Destroy()
-			end
-			if BypassGpsLoop then
-				BypassGpsLoop:Disconnect()
-				BypassGpsLoop = nil
-			end
+            XyzClone.Parent = game.Players.LocalPlayer.PlayerGui:WaitForChild("hud"):WaitForChild("safezone"):WaitForChild("backpack")
+            local Pos = GetPosition()
+            local StringInput = string.format("%s, %s, %s", ExportValue(Pos[1]), ExportValue(Pos[2]), ExportValue(Pos[3]))
+            XyzClone.Text = "<font color='#ff4949'>X</font><font color = '#a3ff81'>Y</font><font color = '#626aff'>Z</font>: "..StringInput
+            BypassGpsLoop = game:GetService("RunService").Heartbeat:Connect(function()
+                local Pos = GetPosition()
+                StringInput = string.format("%s, %s, %s", ExportValue(Pos[1]), ExportValue(Pos[2]), ExportValue(Pos[3]))
+                XyzClone.Text = "<font color='#ff4949'>X</font><font color = '#a3ff81'>Y</font><font color = '#626aff'>Z</font> : "..StringInput
+            end)
+        else
+            if PlayerGui.hud.safezone.backpack:FindFirstChild("xyz") then
+                PlayerGui.hud.safezone.backpack:FindFirstChild("xyz"):Destroy()
+            end
+            if BypassGpsLoop then
+                BypassGpsLoop:Disconnect()
+                BypassGpsLoop = nil
+            end
         end
     end)
     local RemoveFog = Tabs.Misc:AddToggle("RemoveFog", {Title = "Remove Fog", Default = false })
@@ -912,13 +904,13 @@ do
     DayOnly:OnChanged(function()
         if Options.DayOnly.Value == true then
             DayOnlyLoop = RunService.Heartbeat:Connect(function()
-				game:GetService("Lighting").TimeOfDay = "12:00:00"
-			end)
-		else
-			if DayOnlyLoop then
-				DayOnlyLoop:Disconnect()
-				DayOnlyLoop = nil
-			end
+                game:GetService("Lighting").TimeOfDay = "12:00:00"
+            end)
+        else
+            if DayOnlyLoop then
+                DayOnlyLoop:Disconnect()
+                DayOnlyLoop = nil
+            end
         end
     end)
     local HoldDuration = Tabs.Misc:AddToggle("HoldDuration", {Title = "Hold Duration 0 sec", Default = false })
@@ -991,3 +983,5 @@ Fluent:Notify({
     Content = "Executed!",
     Duration = 8
 })
+
+-- End of the Code
