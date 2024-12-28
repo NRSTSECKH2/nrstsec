@@ -1,5 +1,5 @@
-if getgenv().cuppink then warn("NengzXHUB : Already executed!") return end
-getgenv().cuppink = true
+if getgenv().nengzx then warn("NengzXHUB : Already executed!") return end
+getgenv().nengzx = true
 
 if not game:IsLoaded() then
     game.Loaded:Wait()
@@ -787,6 +787,49 @@ do
             WorldEventTPDropdownUI:SetValue(nil)
         end
     end)
+    local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local playerNames = {} -- Holds the player names for the dropdown
+
+-- Function to update player names in the dropdown
+local function updatePlayerNames()
+    playerNames = {}
+    for _, player in ipairs(Players:GetPlayers()) do
+        if player ~= LocalPlayer then -- Exclude the local player
+            table.insert(playerNames, player.Name)
+        end
+    end
+    return playerNames
+end
+
+-- Function to teleport to the selected player
+local function teleportToPlayer(selectedName)
+    local targetPlayer = Players:FindFirstChild(selectedName)
+    if targetPlayer and targetPlayer.Character and targetPlayer.Character:FindFirstChild("HumanoidRootPart") then
+        LocalPlayer.Character.HumanoidRootPart.CFrame = targetPlayer.Character.HumanoidRootPart.CFrame
+    end
+end
+
+-- Add the "Teleport To Player" dropdown
+local TeleportToPlayerDropdownUI = Tabs.Teleports:AddDropdown("TeleportToPlayerDropdownUI", {
+    Title = "Teleport To Player",
+    Values = updatePlayerNames(),
+    Multi = false,
+    Default = nil,
+    Callback = function(selectedName)
+        teleportToPlayer(selectedName)
+    end
+})
+
+-- Update dropdown when players join or leave
+Players.PlayerAdded:Connect(function()
+    TeleportToPlayerDropdownUI:SetValues(updatePlayerNames())
+end)
+
+Players.PlayerRemoving:Connect(function()
+    TeleportToPlayerDropdownUI:SetValues(updatePlayerNames())
+end)
+
     Tabs.Teleports:AddButton({
         Title = "Teleport to Traveler Merchant",
         Description = "Teleports to the Traveler Merchant.",
@@ -986,7 +1029,7 @@ end
 
 Window:SelectTab(1)
 Fluent:Notify({
-    Title = "CupPink",
+    Title = "NengzX",
     Content = "Executed!",
     Duration = 8
 })
