@@ -34,9 +34,6 @@ if DeviceType == "Mobile" then
     UICorner.CornerRadius = UDim.new(1, 0)
     UICorner.Parent = MainFrame
 
-    UICorner_2.CornerRadius = UDim.new(0, 10)
-    UICorner_2.Parent = ImageLabel
-
     ImageLabel.Parent = MainFrame
     ImageLabel.AnchorPoint = Vector2.new(0.5, 0.5)
     ImageLabel.BackgroundColor3 = Color3.new(0, 0, 0)
@@ -83,25 +80,13 @@ local RunService = game:GetService("RunService")
 local Workspace = game:GetService("Workspace")
 local Players = game:GetService("Players")
 local CoreGui = game:GetService('StarterGui')
-local ContextActionService = game:GetService('ContextActionService')
 local UserInputService = game:GetService('UserInputService')
 
 -- // // // Locals // // // --
 local LocalPlayer = Players.LocalPlayer
 local LocalCharacter = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local HumanoidRootPart = LocalCharacter:FindFirstChild("HumanoidRootPart")
-local UserPlayer = HumanoidRootPart:WaitForChild("user")
-local ActiveFolder = Workspace:FindFirstChild("active")
-local FishingZonesFolder = Workspace:FindFirstChild("zones"):WaitForChild("fishing")
-local TpSpotsFolder = Workspace:FindFirstChild("world"):WaitForChild("spawns"):WaitForChild("TpSpots")
-local NpcFolder = Workspace:FindFirstChild("world"):WaitForChild("npcs")
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
-local screenGui = Instance.new("ScreenGui", PlayerGui)
-local shadowCountLabel = Instance.new("TextLabel", screenGui)
-local RenderStepped = RunService.RenderStepped
-local WaitForSomeone = RenderStepped.Wait
-
--- // // // Features List // // // --
 local teleportSpots = {}
 local PlayerNamesCache = {}
 
@@ -114,40 +99,12 @@ function ShowNotification(String)
     })
 end
 
--- // Sending Execution To Discord // --
-local function GetPlayerStats()
-    local hud = LocalPlayer:FindFirstChild("PlayerGui") and LocalPlayer.PlayerGui:FindFirstChild("hud")
-    if hud and hud.safezone then
-        local coins = hud.safezone:FindFirstChild("coins") and hud.safezone.coins.Text or "N/A"
-        local jobId = game.JobId
-        local joinScript = string.format("game:GetService('TeleportService'):TeleportToPlaceInstance(%d, '%s', game:GetService('Players').LocalPlayer)", game.PlaceId, jobId)
-        return {
-            Username = LocalPlayer.Name,
-            DisplayName = LocalPlayer.DisplayName,
-            Coins = coins,
-            JobId = jobId,
-            JoinScript = joinScript
-        }
-    end
-    return nil
-end
-
--- // Player Management // --
 local function UpdatePlayerList() 
     PlayerNamesCache = {}
     for _, player in pairs(Players:GetPlayers()) do
         table.insert(PlayerNamesCache, player.Name)
     end
 end
-
--- // Player Events // --
-Players.PlayerAdded:Connect(function()
-    UpdatePlayerList()
-end)
-
-Players.PlayerRemoving:Connect(function()
-    UpdatePlayerList()
-end)
 
 -- // UI and Button Configurations // -- 
 local Tabs = {
@@ -171,23 +128,58 @@ do
 
     -- Main Tab
     local section = Tabs.Main:AddSection("Auto Fishing")
-    local autoCast = Tabs.Main:AddToggle("autoCast", {Title = "Auto Cast", Default = false })
-    local autoShake = Tabs.Main:AddToggle("autoShake", {Title = "Auto Shake", Default = false })
-    local autoReel = Tabs.Main:AddToggle("autoReel", {Title = "Auto Reel", Default = false })
-    local FreezeCharacter = Tabs.Main:AddToggle("FreezeCharacter", {Title = "Freeze Character", Default = false })
-    
-    -- Continue with your options for autoCast, autoReel, etc.
+    local autoCastToggle = Tabs.Main:AddToggle("autoCast", {Title = "Auto Cast", Default = false })
+    local autoShakeToggle = Tabs.Main:AddToggle("autoShake", {Title = "Auto Shake", Default = false })
+    local autoReelToggle = Tabs.Main:AddToggle("autoReel", {Title = "Auto Reel", Default = false })
+    local freezeCharacterToggle = Tabs.Main:AddToggle("freezeCharacter", {Title = "Freeze Character", Default = false })
 
-    -- // Teleports Tab // --
-    local section = Tabs.Teleports:AddSection("Select Teleport")
+    -- Mode Options
+    local sectionModes = Tabs.Main:AddSection("Mode Fishing")
+    local autoCastMode = Tabs.Main:AddDropdown("autoCastMode", {
+        Title = "Auto Cast Mode",
+        Values = {"Legit", "Blatant"},
+        Multi = false,
+        Default = "Legit",
+    })
+    local autoShakeMode = Tabs.Main:AddDropdown("autoShakeMode", {
+        Title = "Auto Shake Mode",
+        Values = {"Navigation", "Mouse"},
+        Multi = false,
+        Default = "Navigation",
+    })
+    local autoReelMode = Tabs.Main:AddDropdown("autoReelMode", {
+        Title = "Auto Reel Mode",
+        Values = {"Legit", "Blatant"},
+        Multi = false,
+        Default = "Legit",
+    })
+
+    -- Items Tab
+    local sectionItems = Tabs.Items:AddSection("Sell Items")
+    Tabs.Items:AddButton({
+        Title = "Sell Hand",
+        Callback = function()
+            -- Implementation for selling hand
+        end
+    })
+    Tabs.Items:AddButton({
+        Title = "Sell All",
+        Callback = function()
+            -- Implementation for selling all
+        end
+    })
+
+    -- Teleports Tab
+    local sectionTeleports = Tabs.Teleports:AddSection("Select Teleport")
     local IslandTPDropdownUI = Tabs.Teleports:AddDropdown("IslandTPDropdownUI", {
         Title = "Area Teleport",
         Values = teleportSpots,
         Multi = false,
         Default = nil,
     })
+    
     IslandTPDropdownUI:OnChanged(function(Value)
-        if teleportSpots and HumanoidRootPart ~= nil then
+        if teleportSpots and HumanoidRootPart then
             xpcall(function()
                 HumanoidRootPart.CFrame = TpSpotsFolder:FindFirstChild(Value).CFrame + Vector3.new(0, 5, 0)
                 IslandTPDropdownUI:SetValue(nil) -- Reset the dropdown
@@ -196,7 +188,7 @@ do
             end)
         end
     end)
-
+    
     -- World Events Dropdown
     local WorldEventTPDropdownUI = Tabs.Teleports:AddDropdown("WorldEventTPDropdownUI", {
         Title = "Select World Event",
@@ -206,7 +198,6 @@ do
     })
 
     WorldEventTPDropdownUI:OnChanged(function(Value)
-        -- Define your teleport offset if needed
         local offset = Vector3.new(0, 0, 0)
         local WorldEventLocations = {
             ["Strange Whirlpool"] = CFrame.new(game.Workspace.zones.fishing.Isonade.Position + offset),
@@ -216,16 +207,16 @@ do
             ["The Depths - Serpent"] = CFrame.new(game.Workspace.zones.fishing["The Depths - Serpent"].Position + Vector3.new(0, 50, 0)),
             ["Megalodon"] = CFrame.new(game.Workspace.zones.fishing["Megalodon"].Position + offset),
         }
-        
+
         if WorldEventLocations[Value] and HumanoidRootPart then
             HumanoidRootPart.CFrame = WorldEventLocations[Value]
             WorldEventTPDropdownUI:SetValue(nil) -- Reset the dropdown
         else
-            ShowNotification("Not found: " .. Value) -- Notify if the location is not found
+            ShowNotification("Not found: " .. Value)
         end
     end)
 
-    -- Teleport To Player Dropdown
+    -- Dropdown for Teleporting to Players
     local TeleportToPlayerDropdownUI = Tabs.Teleports:AddDropdown("TeleportToPlayerDropdownUI", {
         Title = "Teleport To Player",
         Values = PlayerNamesCache,  -- To be filled with actual player names
@@ -236,7 +227,7 @@ do
     TeleportToPlayerDropdownUI:OnChanged(function(Value)
         for _, player in pairs(Players:GetPlayers()) do
             if player.Name == Value and player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
-                HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0) -- Adjust position if needed
+                HumanoidRootPart.CFrame = player.Character.HumanoidRootPart.CFrame + Vector3.new(0, 5, 0)
                 TeleportToPlayerDropdownUI:SetValue(nil) -- Reset the dropdown after teleporting
                 break
             end
@@ -248,14 +239,17 @@ do
         Title = "Teleport to Traveler Merchant",
         Description = "Teleports to the Traveler Merchant.",
         Callback = function()
-            local Merchant = game.Workspace.active:FindFirstChild("Merchant Boat")
-            if not Merchant then return ShowNotification("Not found Merchant") end
-            HumanoidRootPart.CFrame = CFrame.new(game.Workspace.active["Merchant Boat"].Boat["Merchant Boat"].r.HandlesR.Position)
+            local Merchant = Workspace.active:FindFirstChild("Merchant Boat")
+            if not Merchant then return ShowNotification("Merchant not found") end
+            HumanoidRootPart.CFrame = CFrame.new(Merchant.Boat["Merchant Boat"].r.HandlesR.Position)
         end
     })
     
     -- Update Dropdown Values
-    UpdatePlayerList() -- Initial call to populate the dropdowns with current player names
+    UpdatePlayerList() -- Initial call to populate the dropdown with current player names
+    Players.PlayerAdded:Connect(UpdatePlayerList)
+    Players.PlayerRemoving:Connect(UpdatePlayerList)
+
 end
 
 Window:SelectTab(1)
